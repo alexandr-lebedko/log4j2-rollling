@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <Appenders>
+        <Console name="console">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+        </Console>
+        <RollingFile name="rollingFile"
+                     fileName="log/loggs.log"
+                     filePattern="log/loggs.%d{dd-MM-hh-ss}.%i.log.zip"
+                     ignoreExceptions="false"
+                     append="true">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10">
+                <Delete basePath="log">
+                    <IfFileName glob="loggs.*.log.zip">
+                        <IfAny>
+                            <IfAccumulatedFileSize exceeds="2KB"/>
+                            <IfLastModified age="2H"/>
+                        </IfAny>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="net.lebedko.Main">
+            <AppenderRef ref="rollingFile"/>
+        </Logger>
+        <Root level="trace">
+            <AppenderRef ref="console"/>
+        </Root>
+    </Loggers>
+</configuration>
